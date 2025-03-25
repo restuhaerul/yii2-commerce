@@ -5,6 +5,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
+use yii\bootstrap5;
 
 /** @var yii\web\View $this */
 /** @var backend\models\search\ProductSearch $searchModel */
