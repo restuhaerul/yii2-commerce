@@ -163,7 +163,7 @@ AppAsset::register($this);
                     </div>
 
                     <div class="col text-right">
-                        Created by <a href="https://youtube.com/TheCodeholic" target="_blank">TheCodeholic</a>
+                        Created by <a href="https://instagram.com/restuhaerul" target="_blank">Restu Haerul Z.</a>
                     </div>
                 </div>
             </div>
