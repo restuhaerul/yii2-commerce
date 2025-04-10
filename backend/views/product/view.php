@@ -31,14 +31,31 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             'name',
-            'description:ntext',
-            'image',
-            'price',
-            'status',
-            'created_at',
-            'updated_at',
-            'created_by',
-            'updated_by',
+            'description:html',
+            [
+                'attribute' => 'image',
+                'format' => 'html',
+                'value' => fn() => Html::img($model->getImageUrl(), ['style' => 'width: 50px'])
+            ],
+            [
+                'attribute' => 'price',
+                'format' => 'raw', // Untuk menampilkan HTML
+                'value' => function ($model) {
+                    return 'Rp ' . number_format((float)$model->price, 2, ',', '.');
+
+                },
+            ],
+            [
+                'attribute' => 'status',
+                'format' => 'html',
+                'value' => fn() => Html::tag('span', $model->status ? 'Aktif' : 'Tidak', [
+                        'class' => $model->status ? 'badge badge-success' : 'badge badge-danger'
+                ])
+            ],
+            'created_at:datetime',
+            'updated_at:datetime',
+            'createdBy.username',
+            'updatedBy.username',
         ],
     ]) ?>
 

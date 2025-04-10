@@ -7,7 +7,7 @@ namespace common\models\query;
  *
  * @see \common\models\UserAdress
  */
-class UserAdressQuery extends \yii\db\ActiveQuery
+class UserAddressQuery extends \yii\db\ActiveQuery
 {
     /*public function active()
     {

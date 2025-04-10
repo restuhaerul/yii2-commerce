@@ -16,8 +16,9 @@ use Yii;
  * @property string|null $zipcode
  *
  * @property User $user
+ *
  */
-class UserAdress extends \yii\db\ActiveRecord
+class UserAddress extends \yii\db\ActiveRecord
 {
 
 
@@ -71,11 +72,11 @@ class UserAdress extends \yii\db\ActiveRecord
 
     /**
      * {@inheritdoc}
-     * @return \common\models\query\UserAdressQuery the active query used by this AR class.
+     * @return \common\models\query\UserAddressQuery the active query used by this AR class.
      */
     public static function find()
     {
-        return new \common\models\query\UserAdressQuery(get_called_class());
+        return new \common\models\query\UserAddressQuery(get_called_class());
     }
 
 }

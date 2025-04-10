@@ -4,9 +4,11 @@ namespace backend\controllers;
 
 use common\models\Product;
 use backend\models\search\ProductSearch;
+use yii\db\Exception;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
 
 /**
  * ProductController implements the CRUD actions for Product model.
@@ -64,13 +66,19 @@ class ProductController extends Controller
      * Creates a new Product model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
+     * @throws Exception
      */
     public function actionCreate()
     {
         $model = new Product();
+        $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+//        echo '<pre>';
+//        var_dump($model);
+//        echo '</pre>';
+//        exit;
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
+            if ($model->load($this->request->post()) && $model-> save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {
@@ -93,8 +101,19 @@ class ProductController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($this->request->isPost) {
+            $oldImage = $model->image;
+            $model->load($this->request->post());
+            $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+
+            // Jika tidak upload file baru, pertahankan gambar lama
+            if (!$model->imageFile) {
+                $model->image = $oldImage;
+            }
+
+            if ($model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         }
 
         return $this->render('update', [

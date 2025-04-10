@@ -19,6 +19,7 @@ AppAsset::register($this);
     <?php $this->registerCsrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/accounting.js/0.4.1/accounting.min.js"></script>
 </head>
 <body id="page-top">
 <?php $this->beginBody() ?>
