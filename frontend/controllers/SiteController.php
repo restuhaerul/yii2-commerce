@@ -3,6 +3,8 @@
 namespace frontend\controllers;
 
 use common\models\Product;
+use common\models\User;
+use common\models\UserAddress;
 use frontend\models\ResendVerificationEmailForm;
 use frontend\models\VerifyEmailForm;
 use Yii;
@@ -17,6 +19,7 @@ use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
+use yii\web\ForbiddenHttpException;
 
 /**
  * Site controller
@@ -228,6 +231,85 @@ class SiteController extends Controller
 
         return $this->render('resendVerificationEmail', [
             'model' => $model
+        ]);
+    }
+
+    public function actionProfile()
+    {
+        $user = Yii::$app->user->identity;
+        $userAddresses = $user->addresses;
+        $userAddress = new UserAddress();
+        $userAddress->user_id = $user->id;
+        if (!empty($userAddresses)) {
+            $userAddress = $userAddresses[0];
+        }
+        return $this->render('profile', [
+            'user' => $user,
+            'userAddress' => $userAddress
+        ]);
+
+
+    }
+
+    /**
+     * @throws ForbiddenHttpException
+     */
+    public function actionUpdateAddress()
+    {
+        if (!Yii::$app->request->isAjax) {
+            throw new \yii\web\ForbiddenHttpException('Only AJAX requests are allowed');
+        }
+
+        $model = UserAddress::find()->where(['user_id' => Yii::$app->user->id])->one();
+
+        if (!$model) {
+            $model = new UserAddress();
+            $model->user_id = Yii::$app->user->id;
+        }
+
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->save()) {
+                return $this->asJson([
+                    'status' => 'success',
+                    'message' => 'Address updated successfully', // Pesan spesifik
+                    'refresh' => true
+                ]);
+            }
+        }
+
+        return $this->asJson([
+            'status' => 'error',
+            'message' => 'Failed to update address',
+            'errors' => $model->errors ?? null
+        ]);
+    }
+
+    /**
+     * @throws ForbiddenHttpException
+     */
+    public function actionUpdateAccount()
+    {
+        if (!Yii::$app->request->isAjax) {
+            throw new \yii\web\ForbiddenHttpException('Only AJAX requests are allowed');
+        }
+
+        $user = Yii::$app->user->identity;
+        $user->scenario = User::SCENARIO_UPDATE;
+
+        if ($user->load(Yii::$app->request->post())) {
+            if ($user->save()) {
+                return $this->asJson([
+                    'status' => 'success',
+                    'message' => 'Account updated successfully', // Pesan spesifik
+                    'refresh' => true
+                ]);
+            }
+        }
+
+        return $this->asJson([
+            'status' => 'error',
+            'message' => 'Failed to update account',
+            'errors' => $user->errors ?? null
         ]);
     }
 }

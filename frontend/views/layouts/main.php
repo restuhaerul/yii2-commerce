@@ -10,6 +10,9 @@ use yii\bootstrap5\Html;
 use yii\bootstrap5\Nav;
 use yii\bootstrap5\NavBar;
 
+\yii\web\JqueryAsset::register($this);
+\yii\bootstrap5\BootstrapAsset::register($this);
+\yii\bootstrap5\BootstrapPluginAsset::register($this);
 AppAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
@@ -46,17 +49,33 @@ AppAsset::register($this);
         'items' => $menuItems,
     ]);
     if (Yii::$app->user->isGuest) {
-        echo Html::tag('div',Html::a('Login',['/site/login'],['class' => ['btn btn-link login text-decoration-none']]),['class' => ['d-flex']]);
+        echo Html::tag('div', Html::a('Login', ['/site/login'], ['class' => ['btn btn-link login text-decoration-none']]), ['class' => ['d-flex']]);
     } else {
-        echo Html::beginForm(['/site/logout'], 'post', ['class' => 'd-flex'])
-            . Html::submitButton(
-                'Logout (' . Yii::$app->user->identity->username . ')',
-                ['class' => 'btn btn-link logout text-decoration-none']
-            )
-            . Html::endForm();
-    }
-    NavBar::end();
-    ?>
+        echo Html::beginTag('div', ['class' => 'dropdown d-flex']);
+
+        // Tombol dropdown dengan username
+        echo Html::button(
+            Yii::$app->user->identity->getDisplayName() . ' <span class="caret"></span>',
+            [
+                'class' => 'btn btn-link dropdown-toggle text-decoration-none text-white',
+                'data-bs-toggle' => 'dropdown', // Diubah untuk Bootstrap 5
+                'aria-expanded' => 'false'
+            ]
+        );
+
+        // Menu dropdown
+        echo Html::beginTag('div', ['class' => 'dropdown-menu dropdown-menu-end text-gray']); // Diubah untuk Bootstrap 5
+        echo Html::a('Profile', ['/site/profile'], ['class' => 'dropdown-item text-gray']);
+        echo Html::a('Logout', ['/site/logout'], [
+            'class' => 'dropdown-item',
+            'data-method' => 'post'
+        ]);
+        echo Html::endTag('div');
+
+        echo Html::endTag('div');
+}
+NavBar::end();
+   ?>
 </header>
 
 <main role="main" class="flex-shrink-0">

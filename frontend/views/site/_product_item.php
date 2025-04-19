@@ -10,15 +10,15 @@ use yii\helpers\StringHelper;
         </a>
         <div class="card-body">
             <h4 class="card-title">
-                <a href="#"><?php echo \yii\helpers\StringHelper::truncateWords($model->name, 20) ?></a>
+                <a href="#" class="text-dark"><?php echo \yii\helpers\StringHelper::truncateWords($model->name, 20) ?></a>
             </h4>
             <h5><?php echo $model->getPriceInRupiah() ?></h5>
-            <div class="card-text">
+            <div class="card-text text-dark">
                 <?php echo $model->getShortDescription() ?>
             </div>
         </div>
         <div class="card-footer text-right">
-            <a href="#" class="btn btn-primary">
+            <a href="#" class="btn btn-outline-dark ">
                 Add to Cart
             </a>
         </div>

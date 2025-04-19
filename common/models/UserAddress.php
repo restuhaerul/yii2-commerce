@@ -36,7 +36,6 @@ class UserAddress extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['zipcode'], 'default', 'value' => null],
             [['user_id', 'address', 'city', 'state', 'country'], 'required'],
             [['user_id'], 'integer'],
             [['address', 'city', 'state', 'country', 'zipcode'], 'string', 'max' => 255],
